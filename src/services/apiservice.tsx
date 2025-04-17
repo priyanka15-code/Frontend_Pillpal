@@ -68,7 +68,7 @@ interface Notification {
 }
 
 
-const BASE_URL = 'http://10.0.2.2:3000/api/V0'; 
+const BASE_URL = 'https://pillpal-backend-hygo-ti49.onrender.com/api/V0'; 
 
 
 

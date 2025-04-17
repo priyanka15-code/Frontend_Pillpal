@@ -33,7 +33,7 @@ interface Timing {
 interface Duration {
     unit: string;
     value?: number;
-    additionalDetails?: string; // Ensure additionalDetails is optional
+    additionalDetails?: string; 
 }
 
 const AddNotificationScreen: React.FC<AddNotificationScreenProps> = ({ route, navigation }) => {

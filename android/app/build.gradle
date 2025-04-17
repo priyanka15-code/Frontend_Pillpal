@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.tempproject"
+    namespace "com.PillPal"
     defaultConfig {
-        applicationId "com.tempproject"
+        applicationId "com.PillPal"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -104,6 +104,21 @@ android {
     }
     }
 }
+
+afterEvaluate {
+    tasks.named("generateDebugLintReportModel").configure {
+        dependsOn tasks.named("copyReactNativeVectorIconFonts")
+    }
+    tasks.named("generateReleaseLintReportModel").configure {
+        dependsOn tasks.named("copyReactNativeVectorIconFonts")
+    }
+
+    // Adding explicit dependency for lintAnalyzeDebug
+    tasks.named("lintAnalyzeDebug").configure {
+        dependsOn tasks.named("copyReactNativeVectorIconFonts")
+    }
+}
+
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin

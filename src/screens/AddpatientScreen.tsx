@@ -146,6 +146,29 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+  headerContainer: {
+    borderBottomLeftRadius: 30, // Add rounded corners
+    borderBottomRightRadius: 30,
+    overflow: 'hidden', // Ensure no gaps
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    marginTop: 30,
+    backgroundColor: '#6C63FF', // Ensure consistent background color
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
 });
 
 export default AddPatientForm;

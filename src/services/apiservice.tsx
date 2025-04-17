@@ -70,6 +70,7 @@ interface Notification {
 
 const BASE_URL = 'https://pillpal-backend-hygo-ti49.onrender.com/api/V0'; 
 
+// Removed unused apiservice object
 
 
   // Retrieve notifications for a user
@@ -130,7 +131,7 @@ export const AuthService = {
       }
       return response;
     } catch (error: any) {
-      console.error("Error during login: ", error.message);
+      console.error('Error during login: ', error.message);
       throw error;
     }
   

@@ -41,7 +41,11 @@ const Header: React.FC<HeaderProps> = ({ title, userId }) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    borderRadius: 10,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 11,
+    borderBottomRightRadius: 11,
+    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 50,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

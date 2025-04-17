@@ -1,4 +1,3 @@
-
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 
 interface FloatingButtonProps {
@@ -36,6 +35,36 @@ const styles = StyleSheet.create({
   floatingButtonText: {
     fontSize: 30,
     color: 'white',
+  },
+  bottomNavBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  navItem: {
+    flex: 1, // Ensure equal spacing
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+  },
+  navItemText: {
+    color: '#B0B0C3',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  activeText: {
+    color: '#6C63FF',
+    fontWeight: 'bold',
   },
 });
 

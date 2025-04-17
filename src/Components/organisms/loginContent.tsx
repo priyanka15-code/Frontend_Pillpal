@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import CountryPicker, { CountryCode, Country } from 'react-native-country-picker-modal';
+import * as Localize from 'react-native-localize'; // Import react-native-localize
 
 interface LoginContentProps {
   mobileNumber: string;
@@ -21,53 +22,75 @@ const LoginContent: React.FC<LoginContentProps> = ({
   handleLogin,
 }) => {
   const navigation = useNavigation<any>();
-   const [showCountryPicker, setShowCountryPicker] = useState(false);
-    const [countryCode, setCountryCode] = useState<CountryCode>('IN');
-    const [callingCode, setCallingCode] = useState<string>('91');
-  
-    const onSelect = (country: Country) => {
-      setCountryCode(country.cca2);
-      setCallingCode(country.callingCode[0]);
-      setMobileNumber(`+${country.callingCode[0]}`); // Pre-fill the input with the selected country code
-      setShowCountryPicker(false); // Hide the country picker after selection
+  const [showCountryPicker, setShowCountryPicker] = useState(false);
+  const [countryCode, setCountryCode] = useState<CountryCode>('IN');
+  const [callingCode, setCallingCode] = useState<string>('91');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // New state for password visibility
+
+  // Automatically fetch country code based on locale
+  useEffect(() => {
+    const fetchCountryCode = () => {
+      const country = Localize.getCountry(); // Get the user's country code
+      setCountryCode(country as CountryCode);
+
+      // Map country code to calling code (you can use a library or a custom mapping)
+      const countryCallingCodeMap: { [key: string]: string } = {
+        IN: '91',
+        US: '1',
+        GB: '44',
+        // Add more country codes and calling codes as needed
+      };
+
+      setCallingCode(countryCallingCodeMap[country] || '91'); // Default to '91' if not found
+      setMobileNumber(`+${countryCallingCodeMap[country] || '91'}`); // Pre-fill the input with the country code
     };
 
-    const handleInputPress = () => {
-      setShowCountryPicker(true); // Show the country picker when the input is clicked
-    };
+    fetchCountryCode();
+  }, [setMobileNumber]);
+
+  const onSelect = (country: Country) => {
+    setCountryCode(country.cca2);
+    setCallingCode(country.callingCode[0]);
+    setMobileNumber(`+${country.callingCode[0]}`); // Pre-fill the input with the selected country code
+    setShowCountryPicker(false); // Hide the country picker after selection
+  };
+
+  const handleInputPress = () => {
+    setShowCountryPicker(true); // Show the country picker when the input is clicked
+  };
+
   return (
     <View>
       {/* Phone Input */}
       <View style={styles.inputContainer}>
-  <TouchableOpacity onPress={handleInputPress} style={styles.flagContainer}>
-    {showCountryPicker ? (
-      <CountryPicker
-        countryCode={countryCode}
-        withCallingCode
-        withFlag
-        withFilter
-        onSelect={onSelect}
-        visible={showCountryPicker}
-        onClose={() => setShowCountryPicker(false)}
-      />
-    ) : (
-      <MaterialCommunityIcons name="cellphone-check" size={30} style={styles.icon} />
-    )}
-  </TouchableOpacity>
+        <TouchableOpacity onPress={handleInputPress} style={styles.flagContainer}>
+          {showCountryPicker ? (
+            <CountryPicker
+              countryCode={countryCode}
+              withCallingCode
+              withFlag
+              withFilter
+              onSelect={onSelect}
+              visible={showCountryPicker}
+              onClose={() => setShowCountryPicker(false)}
+            />
+          ) : (
+            <MaterialCommunityIcons name="cellphone-check" size={30} style={styles.icon} />
+          )}
+        </TouchableOpacity>
 
-  <TouchableOpacity onPress={handleInputPress} style={styles.flagContainer}>
-    <Text style={styles.flagText}>+{callingCode}</Text>
-  </TouchableOpacity>
+        <TouchableOpacity onPress={handleInputPress} style={styles.flagContainer}>
+          <Text style={styles.flagText}>+{callingCode}</Text>
+        </TouchableOpacity>
 
-  <TextInput
-    style={styles.input}
-    placeholder="Phone"
-    value={mobileNumber}
-    onChangeText={setMobileNumber}
-    keyboardType="phone-pad"
-  />
-</View>
-
+        <TextInput
+          style={styles.input}
+          placeholder="Phone"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
+          keyboardType="phone-pad"
+        />
+      </View>
 
       {/* Password Input */}
       <View style={styles.inputContainer}>
@@ -77,10 +100,16 @@ const LoginContent: React.FC<LoginContentProps> = ({
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
+          secureTextEntry={!isPasswordVisible} // Toggle visibility
           placeholderTextColor="#7267CB"
         />
-        <MaterialCommunityIcons name="eye-off" size={30} style={styles.iconRight} />
+        <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+          <MaterialCommunityIcons
+            name={isPasswordVisible ? 'eye' : 'eye-off'} // Toggle icon
+            size={30}
+            style={styles.iconRight}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Forgot Password */}
@@ -138,14 +167,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#7267CB',
     fontWeight: 'bold',
-  },
-  countryPicker: {
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#655ED9',
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: '#FFF',
   },
   forgotPassword: {
     color: '#7267CB',
